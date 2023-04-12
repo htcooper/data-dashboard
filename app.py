@@ -4,11 +4,8 @@ import plotly.express as px
 import plotly.graph_objs as go
 
 from pandas.api.types import (
-    is_categorical_dtype,
     is_datetime64_any_dtype,
-    is_numeric_dtype,
     is_object_dtype,
-    is_string_dtype
 )
 
 # Load the data
@@ -22,13 +19,16 @@ def load_data():
 cuisine_types = {
     'Mexican': ['burrito', 'taco', 'quesadilla'],
     'Japanese': ['sushi', 'ramen', 'udon'],
+    'Chinese': ['egg roll', 'kung', 'spring roll', 'chinese', 'chow', 'drunken', 'fried rice', 'mongolian', 'orange chicken'],
     'American': ['burger', 'fries', 'hot dog'],
+    'Asian': ['roll', 'kung', 'curry', 'thai', 'fried rice', 'tom kha', 'tom yum', 'dumpling', 'pho', 'potsticker', 'pad see'],
+    'Italian': ['pizza', 'calzone', 'pasta', 'ravioli', 'spaghetti', 'penne', 'fettu', 'gnocchi', 'alfredo'],
     # Add more cuisine types and item types as needed
 }
 
 item_types = {
-    'burrito': 'main',
-    'taco': 'main',
+    'burrito': 'burrito',
+    'pizza': 'pizza',
     'quesadilla': 'main',
     'sushi': 'main',
     'ramen': 'main',
@@ -134,7 +134,7 @@ ct_fig.update_layout(
     margin=dict(l=50, r=50, t=50, b=50),
     hovermode='x'
 )
-# Display the plot
+# Display  plot
 st.plotly_chart(ct_fig)
 
 ## Show top items by time of day and day of week
