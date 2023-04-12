@@ -15,31 +15,37 @@ def load_data():
     df = pd.read_csv('raw_data.csv', header=0)
     return df
 
-# Define a dictionary of cuisine types and item types
+# Define cuisine types and item types
 cuisine_types = {
-    'Mexican': ['burrito', 'taco', 'quesadilla'],
-    'Japanese': ['sushi', 'ramen', 'udon'],
+    'Mexican': ['burrito', 'taco', 'quesadilla', 'pollo', 'carnitas', 'verde', 'rojo', 'carne'],
+    'Japanese': ['sushi', 'ramen', 'udon', 'tempura', 'gyoza', 'poke', 'musubi', 'roll', 'miso', 'edamame'],
     'Chinese': ['egg roll', 'kung', 'spring roll', 'chinese', 'chow', 'drunken', 'fried rice', 'mongolian', 'orange chicken'],
-    'American': ['burger', 'fries', 'hot dog'],
+    'American': ['burger', 'fries', 'hot dog', 'grilled cheese', 'mac', 'club', 'blt', 'melt', 'bbq', 'ribs', 'brisket', 'chips', 'fried chicken', 'wings', 'tenders'],
     'Asian': ['roll', 'kung', 'curry', 'thai', 'fried rice', 'tom kha', 'tom yum', 'dumpling', 'pho', 'potsticker', 'pad see'],
     'Italian': ['pizza', 'calzone', 'pasta', 'ravioli', 'spaghetti', 'penne', 'fettu', 'gnocchi', 'alfredo'],
-    # Add more cuisine types and item types as needed
+    'Indian': ['curry', 'naan', 'saag', 'samosa', 'aloo', 'tikka', 'masala', 'vindaloo'],
+    'Vegan': ['vegan'],
+    'Mediterranean': ['hummus', 'kabob', 'shawarma', 'falafel', 'pita', 'gyro', 'mediterranean'],
+    'Healthy': ['salad', 'healthy'],
+    'Breakfast': ['breakfast burrito', 'breakfast', 'egg', 'hash', 'bagel', 'waffle', 'toast', 'pancakes'],
+    'Drinks': ['coke', 'soda', 'boba', 'agua', 'water', 'ale', 'lemonade', 'sprite', 'pepsi', 'juice', 'bottle', 'horchata', 'lassi', 'latte', 'tea', 'coffee'],
+    'Dessert': ['cake', 'ice cream', 'sundae', 'cookie', 'tiramisu', 'torte', 'tart'],
+    'Combo Meals': ['combo', 'plate', 'dinner', 'meal']
+
+
 }
 
 item_types = {
     'burrito': 'burrito',
     'pizza': 'pizza',
-    'quesadilla': 'main',
-    'sushi': 'main',
-    'ramen': 'main',
-    'udon': 'main',
-    'burger': 'main',
+    'chips': 'side',
+    'burger': 'burgers',
     'fries': 'side',
-    'hot dog': 'main',
-    # Add more item types as needed
+    'chicken': 'chicken',
+    
 }
 
-# Define a function to determine the cuisine type and item type for each row
+# Determine cuisine type and item type for each row
 def get_cuisine_type_and_item_type(name):
     cuisine_type = None
     item_type = None
@@ -71,10 +77,21 @@ df[['cuisine_type', 'item_type']] = df['name'].apply(get_cuisine_type_and_item_t
 
 # Define cuisine types and colors
 cuisine_colors = {
-    'Mexican': '#e41a1c',
-    'Japanese': '#377eb8',
-    'American': '#4daf4a',
-    # add more
+    'Mexican': '#AA222D', # auburn red
+    'Japanese': '#C3D898', # tea green
+    'American': '#090C9B', # duke blue
+    'Italian': '#FFF370', # maise yellow
+    'Chinese': '#DA4450', # amaranth
+    'Asian': '#FFC170', # earth yellow
+    'Indian': '#6A66A3', # ultra violet
+    'Mediterranean': '#0D6E6A', # caribbean current 
+    'Vegan': '#A7D111', # yellow green
+    'Healthy': '#FC6DAB', # hot pink
+    'Breakfast': '#EC8209', # tangerine
+    'Drinks': '#73C2BE', # tiffany blue
+    'Dessert': '#853894', # eminence
+    'Combo Meals': '#F7ECE1' # linen
+    
 }
 
 # Define item types and colors
@@ -142,19 +159,52 @@ st.plotly_chart(ct_fig)
 def show_top_items():
     # Group the data by time of day and item name
     grouped_df = ct_filtered_data.groupby(['hour', 'name'], as_index=False).agg({'requested_orders': 'sum'})
-    top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
     hour = st.sidebar.selectbox("Select hour of day", range(24))
+    
+    hour_name = {
+        0: 'Midnight',
+        1: '1 am',
+        2: '2 am',
+        3: '3 am',
+        4: '4 am',
+        5: '5 am',
+        6: '6 am',
+        7: '7 am',
+        8: '8 am',
+        9: '9 am',
+        10: '10 am',
+        11: '11 am',
+        12: 'Noon',
+        13: '1 pm',
+        14: '2 pm',
+        15: '3 pm',
+        16: '4 pm',
+        17: '5 pm',
+        18: '6 pm',
+        19: '7 pm',
+        20: '8 pm',
+        21: '9 pm',
+        22: '10 pm',
+        23: '11 pm'
+    }
+
+    selected_top_number = st.sidebar.radio('Select Number of Top Items to View', [5, 10])
+    
+    # Choose number of top items to view
+    if selected_top_number == 5:
+        top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
+        
+    else:
+        top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
 
     data = top_items[top_items['hour'] == hour]
-    fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])
-    fig_hour.update_layout(title=f'Top 5 items for Hour {hour}', xaxis_title='Item', yaxis_title='Requested Orders')
+    fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])  
+    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})', xaxis_title='Item', yaxis_title='Requested Orders')
     st.plotly_chart(fig_hour, use_container_width=True)
-
 
 
 # Allow user to choose whether to drill down on top items
 if st.sidebar.checkbox('View Top Items by Hour', False):
-    #st.subheader('Top Items by Selected Hour')
     show_top_items()
 
 
