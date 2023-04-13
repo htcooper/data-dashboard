@@ -8,60 +8,98 @@ from pandas.api.types import (
     is_object_dtype,
 )
 
-# Load the data
+st.set_page_config(page_title='Cuisine Trends', page_icon='🍴', layout="wide", initial_sidebar_state="expanded")
+
+# Load and cache the data
 @st.cache_data
 def load_data():
-    # Read in csv
     df = pd.read_csv('raw_data.csv', header=0)
     return df
 
-# Define cuisine types and item types
-cuisine_types = {
-    'Mexican': ['burrito', 'taco', 'quesadilla', 'pollo', 'carnitas', 'verde', 'rojo', 'carne'],
-    'Japanese': ['sushi', 'ramen', 'udon', 'tempura', 'gyoza', 'poke', 'musubi', 'roll', 'miso', 'edamame'],
-    'Chinese': ['egg roll', 'kung', 'spring roll', 'chinese', 'chow', 'drunken', 'fried rice', 'mongolian', 'orange chicken'],
-    'American': ['burger', 'fries', 'hot dog', 'grilled cheese', 'mac', 'club', 'blt', 'melt', 'bbq', 'ribs', 'brisket', 'chips', 'fried chicken', 'wings', 'tenders'],
-    'Asian': ['roll', 'kung', 'curry', 'thai', 'fried rice', 'tom kha', 'tom yum', 'dumpling', 'pho', 'potsticker', 'pad see'],
-    'Italian': ['pizza', 'calzone', 'pasta', 'ravioli', 'spaghetti', 'penne', 'fettu', 'gnocchi', 'alfredo'],
-    'Indian': ['curry', 'naan', 'saag', 'samosa', 'aloo', 'tikka', 'masala', 'vindaloo'],
-    'Vegan': ['vegan'],
-    'Mediterranean': ['hummus', 'kabob', 'shawarma', 'falafel', 'pita', 'gyro', 'mediterranean'],
-    'Healthy': ['salad', 'healthy'],
-    'Breakfast': ['breakfast burrito', 'breakfast', 'egg', 'hash', 'bagel', 'waffle', 'toast', 'pancakes'],
-    'Drinks': ['coke', 'soda', 'boba', 'agua', 'water', 'ale', 'lemonade', 'sprite', 'pepsi', 'juice', 'bottle', 'horchata', 'lassi', 'latte', 'tea', 'coffee'],
-    'Dessert': ['cake', 'ice cream', 'sundae', 'cookie', 'tiramisu', 'torte', 'tart'],
-    'Combo Meals': ['combo', 'plate', 'dinner', 'meal']
+# Determine cuisine type based on keyword
+def get_cuisine_type(name):
+    cuisine_types = []
+
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Kung", "Sushi", "Curry", "Thai", "Fried Rice", "Tom Kha", "Dumplings", "Pho", "Potstickers", "Pad See"]):
+        cuisine_types.append("Asian")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Egg Roll", "Kung", "Spring Roll", "Chinese", "Chow", "Drunken", "Fried Rice", "Mongolian", "Orange Chicken"]):
+        cuisine_types.append("Chinese")
+
+    if any(keyword.lower() in name.lower() for keyword in ["pizza", "Calzone", "Pasta", "Ravioli", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Fettuccine", "Fettucine", "Fettuccini", "Fettucini", "Alfredo"]):
+        cuisine_types.append("Italian")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Pasta", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Ravioli", "Fettuccine", "Fettucine", "Fettuccini", "Fettucini", "Alfredo", "Mac"]):
+        cuisine_types.append("Pasta")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Curry", "Naan", "Paneer", "Saag", "Samosa", "Aloo", "Tikka", "Masala", "Vindaloo"]):
+        cuisine_types.append("Indian")
+
+    if "pizza" in name.lower():
+        cuisine_types.append("Pizza")
+
+    if "burrito" in name.lower():
+        cuisine_types.append("Burritos")
+
+    if "poke" in name.lower():
+        cuisine_types.append("Poke")
+
+    if "taco" in name.lower():
+        cuisine_types.append("Tacos")
+
+    if "soup" in name.lower():
+         cuisine_types.append("Soup")
+
+    if "vegan" in name.lower():
+        cuisine_types.append("Vegan")
+
+    if any(keyword.lower() in name.lower() for keyword in ["carne", "pollo", "carnitas", "quesadilla", "verde", "taco", "burrito"]):
+        cuisine_types.append("Mexican")
+        
+    if any(keyword.lower() in name.lower() for keyword in ["Hummus", "Shawarma", "Greek", "Pita", "Gyro", "Kabob", "Falafel", "Mediterranean"]):
+        cuisine_types.append("Mediterranean")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", "Steak", "Fried Chicken", "Hot Dog", "Brat", "Cheesesteak", "Grilled Cheese", "Club", "BLT", "Melt", "BBQ", 'ribs', "Sandwich", 'mac', 'brisket', 'baked potato']):
+        cuisine_types.append("American")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso"]):
+        cuisine_types.append("Japanese")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Egg", "Hash", "Bagel", "Waffle", "Toast", "Pancakes"]):
+        cuisine_types.append("Breakfast")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Chicken", "Wing", "Tenders", "Nuggets"]):
+        cuisine_types.append("Chicken")
+
+    if any(keyword.lower() in name.lower() for keyword in ['fries', "Bread", "Tots", "Rings", "Chips", "Sticks", "Coleslaw", "Knots", "Side", "White Rice", "Extra", "Edamame", "Guacamole", "Salsa", "Dip", "Hash Browns", "Chips", "Soy Sauce", 'baked potato']):
+        cuisine_types.append("Sides")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Juice", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba"]):
+        cuisine_types.append("Drinks")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba"]):
+        cuisine_types.append("Coffee and Tea")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal"]):
+        cuisine_types.append("Combo Specials")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider"]):
+        cuisine_types.append("Burgers")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", "Fresh"]):
+        cuisine_types.append("Healthy")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate"]):
+        cuisine_types.append("Dessert")
+
+        # Return the list of cuisine types
+    return cuisine_types if len(cuisine_types) > 0 else ["Unknown"]
 
 
-}
-
-item_types = {
-    'burrito': 'burrito',
-    'pizza': 'pizza',
-    'chips': 'side',
-    'burger': 'burgers',
-    'fries': 'side',
-    'chicken': 'chicken',
-    
-}
-
-# Determine cuisine type and item type for each row
-def get_cuisine_type_and_item_type(name):
-    cuisine_type = None
-    item_type = None
-    
-    for ct, its in cuisine_types.items():
-        for it in its:
-            if it in name.lower():
-                cuisine_type = ct
-                item_type = item_types.get(it)
-                break
-        if cuisine_type:
-            break
-    
-    return cuisine_type, item_type
-
-
+def extract_cuisine_types(cuisine_type_str):
+    if cuisine_type_str is None or cuisine_type_str == "":
+        return []
+    return cuisine_type_str
 
 ### START ###
 
@@ -73,8 +111,17 @@ with st.sidebar.expander('👇  How to use this chart', expanded=False):
 
 st.sidebar.subheader('View Cuisine Trends')
 
-# Create new columns for cuisine type and item type
-df[['cuisine_type', 'item_type']] = df['name'].apply(get_cuisine_type_and_item_type).apply(pd.Series)
+# Create new column for cuisine type
+df["cuisine_label"] = df["name"].apply(get_cuisine_type)
+
+# Extract the cuisine types so that everything is in a list format
+df["cuisine_types"] = df["cuisine_label"].apply(extract_cuisine_types)
+
+# Make copy of unexploded dataframe for use in top items section to avoid double-counting
+df_unexploded = df.copy()
+
+# Create new rows for each cuisine type for items with more than one
+df = df.explode("cuisine_types")
 
 # Define cuisine types and colors
 cuisine_colors = {
@@ -91,15 +138,19 @@ cuisine_colors = {
     'Breakfast': '#EC8209', # tangerine
     'Drinks': '#73C2BE', # tiffany blue
     'Dessert': '#853894', # eminence
-    'Combo Meals': '#F7ECE1' # linen
+    'Combo Meals': '#F7ECE1', # linen
+    'Pasta': '',
+    'Burritos': '',
+    'Poke': '',
+    'Pizza': '',
+    'Chicken': '',
+    'Soup': '',
+    'Tacos': '',
+    'Burgers': '',
+    'Coffee and Tea': '',
+    'Sides': '',
+    'Unknown': ''
     
-}
-
-# Define item types and colors
-item_colors = {
-     'burrito': '#4daf4a',
-     'drinks': '#377eb8',
-     # add more
 }
 
 # Convert columns to datetime where necessary
@@ -113,29 +164,37 @@ for col in df.columns:
             if is_datetime64_any_dtype(df[col]):
                 df[col] = df[col].dt.tz_localize(None)
 
+# Create list of cuisine types
+cuisine_list = df['cuisine_types'].sort_values().unique().tolist()
+
+
 # Define filters
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 selected_filter = st.sidebar.radio('Select a Date or a Day of the Week', ['Date', 'Day of Week'])
 if selected_filter == 'Date':
     selected_date = st.sidebar.date_input("Select a date", value=df['date'].min(), min_value=df['date'].min(), max_value=df['date'].max())
     filtered_data = df.loc[df['date'] == str(selected_date)]
+    unex_filtered_data = df_unexploded.loc[df_unexploded['date'] == str(selected_date)]  # NEW
 else:
     selected_day = st.sidebar.selectbox('Select a day of the week', days)
     filtered_data = df.loc[df['date'].apply(lambda x: pd.Timestamp(x).day_name()) == selected_day]
+    unex_filtered_data = df_unexploded.loc[df_unexploded["date"].apply(lambda x: pd.Timestamp(x).day_name()) == selected_day]  # NEW
 
-selected_cuisine_types = st.sidebar.multiselect('Select cuisine types', options=cuisine_types)
+selected_cuisine_types = st.sidebar.multiselect('Select cuisine types', options=cuisine_list)
 
 # Create copy of data for cuisine type filter
 ct_filtered_data = filtered_data.copy()
 
 # Filter data based on the selected filters
-ct_filtered_data = filtered_data.loc[filtered_data['cuisine_type'].isin(selected_cuisine_types)]
+ct_filtered_data = filtered_data.loc[filtered_data['cuisine_types'].isin(selected_cuisine_types)]
+filtered_unex_df = unex_filtered_data[unex_filtered_data['cuisine_types'].apply(lambda x: any(cuisine in x for cuisine in selected_cuisine_types))] # NEW
+
 
 # Aggregate data by cuisine type and hour of day
-agg_data = ct_filtered_data.groupby(['cuisine_type', 'hour']).agg({'requested_orders': 'sum'}).reset_index()
+agg_data = ct_filtered_data.groupby(['cuisine_types', 'hour']).agg({'requested_orders': 'sum'}).reset_index()
 
 # Create plot
-ct_fig = px.line(agg_data, x='hour', y='requested_orders', color='cuisine_type', color_discrete_map=cuisine_colors, markers=True)
+ct_fig = px.line(agg_data, x='hour', y='requested_orders', color='cuisine_types', color_discrete_map=cuisine_colors, markers=True)
 
 # Update layout of plot
 if selected_filter == 'Date':
@@ -147,19 +206,29 @@ ct_fig.update_layout(
     xaxis_title='Hour of Day',
     yaxis_title='Total Requested Orders',
     legend_title='Cuisine Type',
-    width=800,
-    height=500,
-    margin=dict(l=50, r=50, t=50, b=50),
+    autosize=True,
+    
+    #width=800,
+    #height=500,
+    #margin=dict(l=50, r=50, t=50, b=50),
     hovermode='x'
 )
 # Display  plot
-st.plotly_chart(ct_fig)
+st.plotly_chart(ct_fig, use_container_width=True)
+
+
 
 ## Show top items by time of day and day of week
 
 def show_top_items():
+
+
+    
+    # Group the filtered DataFrame by 'hour' and 'name', and sum the 'requested_orders' field within each group
+    hourly_items = filtered_unex_df.groupby(['hour', 'name'])['requested_orders'].sum().reset_index()
+
     # Group the data by time of day and item name
-    grouped_df = ct_filtered_data.groupby(['hour', 'name'], as_index=False).agg({'requested_orders': 'sum'})
+    #grouped_df = ct_filtered_data.groupby(['hour', 'name'], as_index=False).agg({'requested_orders': 'sum'})
     hour = st.sidebar.selectbox("Select hour of day", range(24))
     
     hour_name = {
@@ -193,10 +262,12 @@ def show_top_items():
     
     # Choose number of top items to view
     if selected_top_number == 5:
-        top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
+        #top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
+        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
         
     else:
-        top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
+        #top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
+        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
 
     data = top_items[top_items['hour'] == hour]
     fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])  
