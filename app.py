@@ -67,13 +67,14 @@ def get_cuisine_type_and_item_type(name):
 
 df = load_data()
 
+with st.sidebar.expander('👇  How to use this chart', expanded=False):
+    st.write("This chart allows you to view cuisine trends and top items by the day of the week or by a specific date.")
+    st.write(" Once you have made your date/day and cuisine selections, click the View Top Items by Hour checkbox to see the top items for a selected hour. Your selections for day/date and cuisine type(s) will apply to both the trend chart and the top items chart and can be updated at any time.")
+
 st.sidebar.subheader('View Cuisine Trends')
 
 # Create new columns for cuisine type and item type
 df[['cuisine_type', 'item_type']] = df['name'].apply(get_cuisine_type_and_item_type).apply(pd.Series)
-
-# Preview data
-# print(df.head())
 
 # Define cuisine types and colors
 cuisine_colors = {
@@ -199,7 +200,7 @@ def show_top_items():
 
     data = top_items[top_items['hour'] == hour]
     fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])  
-    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})', xaxis_title='Item', yaxis_title='Requested Orders')
+    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})', xaxis_title='Item Name', yaxis_title='Requested Orders')
     st.plotly_chart(fig_hour, use_container_width=True)
 
 
