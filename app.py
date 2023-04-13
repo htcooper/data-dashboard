@@ -20,19 +20,19 @@ def load_data():
 def get_cuisine_type(name):
     cuisine_types = []
 
-    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Kung", "Sushi", "Curry", "Thai", "Fried Rice", "Tom Kha", "Dumplings", "Pho", "Potstickers", "Pad See"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Kung", "Sushi", "Curry", "Thai", "Fried Rice", "Tom Kha", "Dumplings", "Pho", "Potstickers", "Pad See", "tofu", 'bharta', 'mein', 'rangoons']):
         cuisine_types.append("Asian")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Egg Roll", "Kung", "Spring Roll", "Chinese", "Chow", "Drunken", "Fried Rice", "Mongolian", "Orange Chicken"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Egg Roll", "Kung", "Spring Roll", "Chinese", "Chow", "Drunken", "Fried Rice", "Mongolian", "Orange Chicken", 'lo mein', 'rangoons', 'honey walnut', 'wonton']):
         cuisine_types.append("Chinese")
 
-    if any(keyword.lower() in name.lower() for keyword in ["pizza", "Calzone", "Pasta", "Ravioli", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Fettuccine", "Fettucine", "Fettuccini", "Fettucini", "Alfredo"]):
+    if any(keyword.lower() in name.lower() for keyword in ["pizza", "Calzone", "Pasta", "Ravioli", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Fettuc", "Alfredo", "tortellini", 'cacio', 'cannoli', 'linguin', 'burrata', 'italian', 'tagliat', 'meatball', 'farfalle', 'calamari']):
         cuisine_types.append("Italian")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Pasta", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Ravioli", "Fettuccine", "Fettucine", "Fettuccini", "Fettucini", "Alfredo", "Mac"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Pasta", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Ravioli", "Fettuc", "Alfredo", 'farfalle', 'linguin', 'cacio']):
         cuisine_types.append("Pasta")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Curry", "Naan", "Paneer", "Saag", "Samosa", "Aloo", "Tikka", "Masala", "Vindaloo"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Curry", "Naan", "Paneer", "Saag", "Samosa", "Aloo", "Tikka", "Masala", "Vindaloo", "basmati", 'bharta', 'daal', 'jasmine', 'biryani', 'gulub', 'dal', 'korma', 'pakora']):
         cuisine_types.append("Indian")
 
     if "pizza" in name.lower():
@@ -53,43 +53,43 @@ def get_cuisine_type(name):
     if "vegan" in name.lower():
         cuisine_types.append("Vegan")
 
-    if any(keyword.lower() in name.lower() for keyword in ["carne", "pollo", "carnitas", "quesadilla", "verde", "taco", "burrito"]):
+    if any(keyword.lower() in name.lower() for keyword in ["carne", "pollo", "carnitas", "quesadilla", "verde", "taco", "burrito", 'nachos', 'refried', 'fajita']):
         cuisine_types.append("Mexican")
         
-    if any(keyword.lower() in name.lower() for keyword in ["Hummus", "Shawarma", "Greek", "Pita", "Gyro", "Kabob", "Falafel", "Mediterranean"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Hummus", "Shawarma", "Greek", "Pita", "Gyro", "Kabob", 'kebob', "Falafel", "Mediterranean", 'babaganoush']):
         cuisine_types.append("Mediterranean")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", "Steak", "Fried Chicken", "Hot Dog", "Brat", "Cheesesteak", "Grilled Cheese", "Club", "BLT", "Melt", "BBQ", 'ribs', "Sandwich", 'mac', 'brisket', 'baked potato']):
+    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", "Steak", "Fried Chicken", "Hot Dog", "Brat", "Cheesesteak", "Grilled Cheese", "Club", "BLT", "Melt", "BBQ", 'ribs', "Sandwich", 'mac', 'brisket', 'baked potato', 'smashmouth', 'reuben', 'baked beans', 'dog']):
         cuisine_types.append("American")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso", 'nigiri', 'sashimi', 'shishito']):
         cuisine_types.append("Japanese")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Egg", "Hash", "Bagel", "Waffle", "Toast", "Pancakes"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Egg", "Hash", "Bagel", "Waffle", "Toast", "Pancakes", 'omelette', 'bacon', 'donut', 'sausage', 'croissant']):
         cuisine_types.append("Breakfast")
 
     if any(keyword.lower() in name.lower() for keyword in ["Chicken", "Wing", "Tenders", "Nuggets"]):
         cuisine_types.append("Chicken")
 
-    if any(keyword.lower() in name.lower() for keyword in ['fries', "Bread", "Tots", "Rings", "Chips", "Sticks", "Coleslaw", "Knots", "Side", "White Rice", "Extra", "Edamame", "Guacamole", "Salsa", "Dip", "Hash Browns", "Chips", "Soy Sauce", 'baked potato']):
+    if any(keyword.lower() in name.lower() for keyword in ['fries', "Bread", "Tots", "Rings", "Chips", "Sticks", "Coleslaw", "Knots", "Side", "White Rice", "Extra", "Edamame", "Guacamole", "Salsa", "Dip", "Hash Browns", "Chips", "Soy Sauce", 'baked potato', 'babaganoush', 'wasabi', 'greens', 'rice', 'funyun', 'baked beans']):
         cuisine_types.append("Sides")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Juice", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Juice", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba", 'san pellegrino', 'smoothie', 'cappu', 'limona']):
         cuisine_types.append("Drinks")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba", 'cappu', 'espresso']):
         cuisine_types.append("Coffee and Tea")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal", "build"]):
         cuisine_types.append("Combo Specials")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", 'smashmouth']):
         cuisine_types.append("Burgers")
 
     if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", "Fresh"]):
         cuisine_types.append("Healthy")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate", 'oreo', 'cannoli', 'brownie', 'fudge', 'reese']):
         cuisine_types.append("Dessert")
 
         # Return the list of cuisine types
@@ -107,7 +107,8 @@ df = load_data()
 
 with st.sidebar.expander('👇  How to use this chart', expanded=False):
     st.write("This chart allows you to view cuisine trends and top items by the day of the week or by a specific date.")
-    st.write(" Once you have made your date/day and cuisine selections, click the View Top Items by Hour checkbox to see the top items for a selected hour. Your selections for day/date and cuisine type(s) will apply to both the trend chart and the top items chart and can be updated at any time.")
+    st.write(" Once you have made your date/day and cuisine selections, click the View Top Items by Hour checkbox to see the top items for a selected hour.")
+    st.write("Your selections for day/date and cuisine type(s) will apply to both the trend chart and the top items chart and can be updated at any time.")
 
 st.sidebar.subheader('View Cuisine Trends')
 
@@ -139,17 +140,17 @@ cuisine_colors = {
     'Drinks': '#73C2BE', # tiffany blue
     'Dessert': '#853894', # eminence
     'Combo Meals': '#F7ECE1', # linen
-    'Pasta': '',
-    'Burritos': '',
-    'Poke': '',
-    'Pizza': '',
-    'Chicken': '',
-    'Soup': '',
-    'Tacos': '',
-    'Burgers': '',
-    'Coffee and Tea': '',
-    'Sides': '',
-    'Unknown': ''
+    'Pasta': '#DBBBF5', # lavender
+    'Burritos': '#DA95A2', # puce pink
+    'Poke': '#EF2D56', # crayola red
+    'Pizza': '#B8336A', # raspberry
+    'Chicken': '#F3C98B', # sunset orange
+    'Soup': '#314272', # Marian Blue
+    'Tacos': '#FF9F1C', # orange peel
+    'Burgers': '#9C0D38', # claret
+    'Coffee and Tea': '#625141', # umber
+    'Sides': '#F87666', # bittersweet orange
+    'Unknown': '#FDFFFC' # baby powder white
     
 }
 
