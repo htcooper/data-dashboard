@@ -95,13 +95,13 @@ def get_cuisine_type(name):
         # Return the list of cuisine types
     return cuisine_types if len(cuisine_types) > 0 else ["Unknown"]
 
-
+# Make sure a list is returned
 def extract_cuisine_types(cuisine_type_str):
     if cuisine_type_str is None or cuisine_type_str == "":
         return []
     return cuisine_type_str
 
-### START ###
+### CUISINE TRENDS BY DAY/DATE ###
 
 df = load_data()
 
@@ -121,7 +121,7 @@ df["cuisine_types"] = df["cuisine_label"].apply(extract_cuisine_types)
 # Make copy of unexploded dataframe for use in top items section to avoid double-counting
 df_unexploded = df.copy()
 
-# Create new rows for each cuisine type for items with more than one
+# Create new rows for items with more than one cuisine type
 df = df.explode("cuisine_types")
 
 # Define cuisine types and colors
@@ -168,29 +168,25 @@ for col in df.columns:
 # Create list of cuisine types
 cuisine_list = df['cuisine_types'].sort_values().unique().tolist()
 
-
 # Define filters
 days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 selected_filter = st.sidebar.radio('Select a Date or a Day of the Week', ['Date', 'Day of Week'])
 if selected_filter == 'Date':
     selected_date = st.sidebar.date_input("Select a date", value=df['date'].min(), min_value=df['date'].min(), max_value=df['date'].max())
     filtered_data = df.loc[df['date'] == str(selected_date)]
-    unex_filtered_data = df_unexploded.loc[df_unexploded['date'] == str(selected_date)]  # NEW
+    unex_filtered_data = df_unexploded.loc[df_unexploded['date'] == str(selected_date)]  # for top items
 else:
     selected_day = st.sidebar.selectbox('Select a day of the week', days)
     filtered_data = df.loc[df['date'].apply(lambda x: pd.Timestamp(x).day_name()) == selected_day]
-    unex_filtered_data = df_unexploded.loc[df_unexploded["date"].apply(lambda x: pd.Timestamp(x).day_name()) == selected_day]  # NEW
+    unex_filtered_data = df_unexploded.loc[df_unexploded["date"].apply(lambda x: pd.Timestamp(x).day_name()) == selected_day]  # for top items
 
 selected_cuisine_types = st.sidebar.multiselect('Select cuisine types', options=cuisine_list)
 
-# Create copy of data for cuisine type filter
-ct_filtered_data = filtered_data.copy()
-
-# Filter data based on the selected filters
+# Filter data based on selected cuisine types
 ct_filtered_data = filtered_data.loc[filtered_data['cuisine_types'].isin(selected_cuisine_types)]
-filtered_unex_df = unex_filtered_data[unex_filtered_data['cuisine_types'].apply(lambda x: any(cuisine in x for cuisine in selected_cuisine_types))] # NEW
+filtered_unex_df = unex_filtered_data[unex_filtered_data['cuisine_types'].apply(lambda x: any(cuisine in x for cuisine in selected_cuisine_types))] # for top items
 
-# if Date is selected, show sum of orders, if day of week is selected, show mean
+# if date is selected, show sum of orders, if day of week is selected, show mean
 if selected_filter == 'Date':
     agg_data = ct_filtered_data.groupby(['cuisine_types', 'hour']).agg({'requested_orders': 'sum'}).reset_index()
 else:
@@ -210,18 +206,13 @@ ct_fig.update_layout(
     yaxis_title='Total Requested Orders',
     legend_title='Cuisine Type',
     autosize=True,
-    
-    #width=800,
-    #height=500,
-    #margin=dict(l=50, r=50, t=50, b=50),
     hovermode='x'
 )
+
 # Display  plot
 st.plotly_chart(ct_fig, use_container_width=True)
 
-
-
-## Show top items by time of day and day of week
+### TOP ITEMS BY HOUR OF DAY ###
 
 def show_top_items():
     
@@ -233,6 +224,7 @@ def show_top_items():
 
     hour = st.sidebar.selectbox("Select hour of day", range(24))
     
+    # For people who have trouble with military time
     hour_name = {
         0: 'Midnight',
         1: '1 am',
@@ -260,9 +252,9 @@ def show_top_items():
         23: '11 pm'
     }
 
+    # Choose how many top items to view
     selected_top_number = st.sidebar.radio('Select Number of Top Items to View', [5, 10])
     
-    # Choose number of top items to view
     if selected_top_number == 5:
         top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
         
@@ -270,7 +262,7 @@ def show_top_items():
         top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
 
     data = top_items[top_items['hour'] == hour]
-    fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])  
+    fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='#c929b6')])  
     fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})*', xaxis_title='Item Name', yaxis_title='Requested Orders')
     st.plotly_chart(fig_hour, use_container_width=True)
     st.write("\* Note that if a date is selected, the chart will display the sum of requested orders. If the day of week is selected, the chart will display the mean/average of orders on that day of the week.")
