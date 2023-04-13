@@ -190,18 +190,20 @@ ct_filtered_data = filtered_data.copy()
 ct_filtered_data = filtered_data.loc[filtered_data['cuisine_types'].isin(selected_cuisine_types)]
 filtered_unex_df = unex_filtered_data[unex_filtered_data['cuisine_types'].apply(lambda x: any(cuisine in x for cuisine in selected_cuisine_types))] # NEW
 
-
-# Aggregate data by cuisine type and hour of day
-agg_data = ct_filtered_data.groupby(['cuisine_types', 'hour']).agg({'requested_orders': 'sum'}).reset_index()
+# if Date is selected, show sum of orders, if day of week is selected, show mean
+if selected_filter == 'Date':
+    agg_data = ct_filtered_data.groupby(['cuisine_types', 'hour']).agg({'requested_orders': 'sum'}).reset_index()
+else:
+    agg_data = ct_filtered_data.groupby(['cuisine_types', 'hour']).agg({'requested_orders': 'mean'}).reset_index()
 
 # Create plot
 ct_fig = px.line(agg_data, x='hour', y='requested_orders', color='cuisine_types', color_discrete_map=cuisine_colors, markers=True)
 
 # Update layout of plot
 if selected_filter == 'Date':
-    title = f'Cuisine Trends for {selected_date}'
+    title = f'Cuisine Trends for {selected_date} (Sum)*'
 else:
-    title = f'Cuisine Trends for {selected_day}s'
+    title = f'Cuisine Trends for {selected_day}s (Mean)*'
 ct_fig.update_layout(
     title=title,
     xaxis_title='Hour of Day',
@@ -222,14 +224,13 @@ st.plotly_chart(ct_fig, use_container_width=True)
 ## Show top items by time of day and day of week
 
 def show_top_items():
-
-
     
-    # Group the filtered DataFrame by 'hour' and 'name', and sum the 'requested_orders' field within each group
-    hourly_items = filtered_unex_df.groupby(['hour', 'name'])['requested_orders'].sum().reset_index()
+    # Repeat filtering with unexploded data
+    if selected_filter == 'Date':
+        hourly_items = filtered_unex_df.groupby(['hour', 'name'])['requested_orders'].sum().reset_index()
+    else:
+        hourly_items = filtered_unex_df.groupby(['hour', 'name'])['requested_orders'].mean().reset_index()
 
-    # Group the data by time of day and item name
-    #grouped_df = ct_filtered_data.groupby(['hour', 'name'], as_index=False).agg({'requested_orders': 'sum'})
     hour = st.sidebar.selectbox("Select hour of day", range(24))
     
     hour_name = {
@@ -263,17 +264,16 @@ def show_top_items():
     
     # Choose number of top items to view
     if selected_top_number == 5:
-        #top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
         top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
         
     else:
-        #top_items = grouped_df.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
         top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))
 
     data = top_items[top_items['hour'] == hour]
     fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='orange')])  
-    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})', xaxis_title='Item Name', yaxis_title='Requested Orders')
+    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})*', xaxis_title='Item Name', yaxis_title='Requested Orders')
     st.plotly_chart(fig_hour, use_container_width=True)
+    st.write("\* Note that if a date is selected, the chart will display the sum of requested orders. If the day of week is selected, the chart will display the mean/average of orders on that day of the week.")
 
 
 # Allow user to choose whether to drill down on top items
