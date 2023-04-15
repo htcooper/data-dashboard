@@ -281,7 +281,7 @@ def show_top_items():
         return top_items
 
     # Choose how many top items to view
-    selected_topitem_slider = st.sidebar.slider('Select Number of Top Items to View', min_value=5, max_value=25, step=1)
+    selected_topitem_slider = st.sidebar.slider('Select Number of Top Items to View', min_value=5, max_value=25, step=5)
     top_items = get_items(selected_topitem_slider)
     
     data = top_items[top_items['hour'] == hour]
