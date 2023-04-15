@@ -276,21 +276,18 @@ def show_top_items():
         23: '11 pm'
     }
 
+    def get_items(selected_number):
+        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(selected_number, 'requested_orders'))
+        return top_items
+
     # Choose how many top items to view
-    selected_top_number = st.sidebar.radio('Select Number of Top Items to View', [5, 10, 15], horizontal=True)
+    selected_topitem_slider = st.sidebar.slider('Select Number of Top Items to View', min_value=5, max_value=25, step=1)
+    top_items = get_items(selected_topitem_slider)
     
-    if selected_top_number == 5:
-        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
-
-    elif selected_top_number == 10:
-        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(10, 'requested_orders'))  
-        
-    else:
-        top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(15, 'requested_orders'))
-
     data = top_items[top_items['hour'] == hour]
     fig_hour = go.Figure(data=[go.Bar(x=data['name'], y=data['requested_orders'], marker_color='#c929b6')])  
-    fig_hour.update_layout(title=f'Top {selected_top_number} items for Hour {hour} ({hour_name[hour]})*', xaxis_title='Item Name', yaxis_title=yaxis_title)
+    fig_hour.update_layout(title=f'Top {selected_topitem_slider} items for Hour {hour} ({hour_name[hour]})*', xaxis_title='Item Name', yaxis_title=yaxis_title)
+    
     st.plotly_chart(fig_hour, use_container_width=True)
     st.write("\* Note that if a date is selected, the chart will display the sum of requested orders. If the day of week is selected, the chart will display the mean/average of orders on that day of the week.")
 
