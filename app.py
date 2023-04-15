@@ -262,7 +262,7 @@ def show_top_items():
     }
 
     # Choose how many top items to view
-    selected_top_number = st.sidebar.radio('Select Number of Top Items to View', [5, 10])
+    selected_top_number = st.sidebar.radio('Select Number of Top Items to View', [5, 10], horizontal=True)
     
     if selected_top_number == 5:
         top_items = hourly_items.groupby('hour', as_index=False).apply(lambda x: x.nlargest(5, 'requested_orders'))
