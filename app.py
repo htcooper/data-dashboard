@@ -204,9 +204,18 @@ ct_fig.update_layout(
     title=title,
     xaxis_title='Hour of Day',
     yaxis_title='Total Requested Orders',
-    legend_title='Cuisine Type',
+    legend_title='Cuisine Type Legend',
     autosize=True,
-    hovermode='x'
+    hovermode='x',
+    legend=dict(
+    orientation="h",
+    yanchor="top",
+    y=-.35,
+    xanchor="right",
+    x=1,
+    bordercolor="white",
+    borderwidth=.5
+    )   
 )
 
 # Display  plot
