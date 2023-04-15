@@ -65,7 +65,7 @@ def get_cuisine_type(name):
     if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso", 'nigiri', 'sashimi', 'shishito']):
         cuisine_types.append("Japanese")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Egg", "Hash", "Bagel", "Waffle", "Toast", "Pancakes", 'omelette', 'bacon', 'donut', 'sausage', 'croissant']):
+    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Eggs", "Hash", "Bagel", "Waffle", "Toast", "Pancakes", 'omelette', 'bacon', 'donut', 'sausage', 'croissant']):
         cuisine_types.append("Breakfast")
 
     if any(keyword.lower() in name.lower() for keyword in ["Chicken", "Wing", "Tenders", "Nuggets"]):
