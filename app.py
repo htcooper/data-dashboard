@@ -20,19 +20,19 @@ def load_data():
 def get_cuisine_type(name):
     cuisine_types = []
 
-    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Kung", "Sushi", "Curry", "Thai", "Fried Rice", "Tom Kha", "Dumplings", "Pho", "Potstickers", "Pad See", "tofu", 'bharta', 'mein', 'rangoons']):
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Kung", "Sushi", "Curry", "Thai", "Fried Rice", "Tom Kha", "Dumplings", "Pho", "Potstickers", "Pad See", "tofu", 'bharta', 'mein', 'rangoons', 'pork belly', 'eel', 'stir-fried', 'stir fried', 'sweet and sour', 'bibimbap', 'kimchi']):
         cuisine_types.append("Asian")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Egg Roll", "Kung", "Spring Roll", "Chinese", "Chow", "Drunken", "Fried Rice", "Mongolian", "Orange Chicken", 'lo mein', 'rangoons', 'honey walnut', 'wonton']):
+    if any(keyword.lower() in name.lower() for keyword in ["Egg Roll", "Kung", "Spring Roll", "Chinese", "Chow", "Drunken", "Fried Rice", "Mongolian", "Orange Chicken", 'lo mein', 'rangoons', 'honey walnut', 'wonton', 'pork bun', 'stir-fried', 'stir fried', 'sweet and sour', 'mushu', 'mooshu', 'rangoon']):
         cuisine_types.append("Chinese")
 
-    if any(keyword.lower() in name.lower() for keyword in ["pizza", "Calzone", "Pasta", "Ravioli", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Fettuc", "Alfredo", "tortellini", 'cacio', 'cannoli', 'linguin', 'burrata', 'italian', 'tagliat', 'meatball', 'farfalle', 'calamari']):
+    if any(keyword.lower() in name.lower() for keyword in ['italian', "pizza", "Calzone", "Pasta", "Ravioli", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Fettuc", "Alfredo", "tortellini", 'cacio', 'cannoli', 'linguin', 'burrata', 'italian', 'tagliat', 'meatball', 'farfalle', 'calamari', 'rigat', 'pappardelle', 'aranc', 'parmes', 'osso buc']):
         cuisine_types.append("Italian")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Pasta", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Ravioli", "Fettuc", "Alfredo", 'farfalle', 'linguin', 'cacio']):
+    if any(keyword.lower() in name.lower() for keyword in ["Pasta", "Spaghetti", "Penne", "Lasagna", "Gnocchi", "Ravioli", "Fettuc", "Alfredo", 'farfalle', 'linguin', 'cacio', 'fusil', 'rigat']):
         cuisine_types.append("Pasta")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Curry", "Naan", "Paneer", "Saag", "Samosa", "Aloo", "Tikka", "Masala", "Vindaloo", "basmati", 'bharta', 'daal', 'jasmine', 'biryani', 'gulub', 'dal', 'korma', 'pakora']):
+    if any(keyword.lower() in name.lower() for keyword in ["Curry", "Naan", "Paneer", "Saag", "Samosa", "Aloo", "Tikka", "Masala", "Vindaloo", "basmati", 'bharta', 'daal', 'jasmine', 'biryani', 'gulub', 'dal', 'korma', 'pakora', 'birria', 'chutney', 'roti', 'pappadum', 'raita', 'papadum']):
         cuisine_types.append("Indian")
 
     if "pizza" in name.lower():
@@ -47,49 +47,52 @@ def get_cuisine_type(name):
     if "taco" in name.lower():
         cuisine_types.append("Tacos")
 
-    if "soup" in name.lower():
-         cuisine_types.append("Soup")
+    if any(keyword.lower() in name.lower() for keyword in ["soup", "soppa"]):
+        cuisine_types.append("Soup")
+    
+    if any(keyword.lower() in name.lower() for keyword in ["vegan", "vegetarian", "veggie", 'soyrizo', 'esquites', 'string bean', 'black bean', 'edamame', 'hummus', 'babagan', 'miso', 'misso', 'guacamole', 'shishito', 'eggplant', 'okra']):
+        cuisine_types.append("Vegan/Vegetarian")
 
-    if "vegan" in name.lower():
-        cuisine_types.append("Vegan")
-
-    if any(keyword.lower() in name.lower() for keyword in ["carne", "pollo", "carnitas", "quesadilla", "verde", "taco", "burrito", 'nachos', 'refried', 'fajita']):
+    if any(keyword.lower() in name.lower() for keyword in ["carne", "pollo", "carnitas", "quesadilla", "verde", "taco", "burrito", 'nachos', 'refried', 'fajita', 'torta', 'ceviche', 'churro', 'flauta', 'arepa', 'esquites', 'ques', 'street corn', 'mexican', 'enchilada', 'camar', 'mariscos']):
         cuisine_types.append("Mexican")
         
-    if any(keyword.lower() in name.lower() for keyword in ["Hummus", "Shawarma", "Greek", "Pita", "Gyro", "Kabob", 'kebob', "Falafel", "Mediterranean", 'babaganoush']):
+    if any(keyword.lower() in name.lower() for keyword in ["Hummus", "Shawarma", "Greek", "Pita", "Gyro", "Kabob", 'kebob', "Falafel", "Mediterranean", 'babaganoush', 'dolma', 'grape leaves', 'tabboul', 'tulumba', 'baba']):
         cuisine_types.append("Mediterranean")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", "Steak", "Fried Chicken", "Hot Dog", "Brat", "Cheesesteak", "Grilled Cheese", "Club", "BLT", "Melt", "BBQ", 'ribs', "Sandwich", 'mac', 'brisket', 'baked potato', 'smashmouth', 'reuben', 'baked beans', 'dog']):
+    if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", "Steak", "Fried Chicken", "Hot Dog", "Brat", "Cheesesteak", "Grilled Cheese", "Club", "BLT", "Melt", "BBQ", 'ribs', "Sandwich", 'mac', 'brisket', 'baked potato', 'smashmouth', 'reuben', 'baked beans', 'dog', 'po boy', 'wrap', 'blackened', 'corned beef', 'hush puppies', 'mashed potat', 'jambalaya', 'smoked salmon', 'pastrami', 'sub', 'okra', 'hoagie']):
         cuisine_types.append("American")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso", 'nigiri', 'sashimi', 'shishito']):
+    if any(keyword.lower() in name.lower() for keyword in ["Roll", "Ramen", "Sushi", "Tempura", "Gyoza", "Musubi", "Edamame", "Miso", 'nigiri', 'sashimi', 'shishito', 'eel', 'ponzu', 'misso', 'udon', 'soba', 'tonkatsu', 'tonkotsu', 'teriyaki']):
         cuisine_types.append("Japanese")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Eggs", "Hash", "Bagel", "Waffle", "Toast", "Pancakes", 'omelette', 'bacon', 'donut', 'sausage', 'croissant']):
+    if any(keyword.lower() in name.lower() for keyword in ["Breakfast", "Eggs", "Hash", "Bagel", "Waffle", "Toast", "Pancakes", 'omelette', 'bacon', 'donut', 'sausage', 'croissant', 'pannies']):
         cuisine_types.append("Breakfast")
 
     if any(keyword.lower() in name.lower() for keyword in ["Chicken", "Wing", "Tenders", "Nuggets"]):
         cuisine_types.append("Chicken")
 
-    if any(keyword.lower() in name.lower() for keyword in ['fries', "Bread", "Tots", "Rings", "Chips", "Sticks", "Coleslaw", "Knots", "Side", "White Rice", "Extra", "Edamame", "Guacamole", "Salsa", "Dip", "Hash Browns", "Chips", "Soy Sauce", 'baked potato', 'babaganoush', 'wasabi', 'greens', 'rice', 'funyun', 'baked beans']):
+    if any(keyword.lower() in name.lower() for keyword in ['fries', "Bread", "Tots", "Rings", "Chips", "Sticks", "Coleslaw", "Knots", "Side", "White Rice", "Extra", "Edamame", "Guacamole", "Salsa", "Dip", "Hash Browns", "Chips", "Soy Sauce", 'baked potato', 'babaganoush', 'wasabi', 'greens', 'rice', 'funyun', 'baked beans', 'sauce', 'hush puppies', 'mashed potat', 'poutine', 'naan', 'raita', 'pappadum', 'boost', 'esquites', 'brussel', 'string bean', 'black bean', 'cole slaw', 'corn on the cob']):
         cuisine_types.append("Sides")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Juice", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba", 'san pellegrino', 'smoothie', 'cappu', 'limona']):
+    if any(keyword.lower() in name.lower() for keyword in ["Juice", "Snapple", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba", 'san pellegrino', 'smoothie', 'cappu', 'limona', 'cola', 'red bull', 'jaritos', 'jarritos', 'dr pepper', 'cold brew', 'kool']):
         cuisine_types.append("Drinks")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba", 'cappu', 'espresso']):
+    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba", 'cappu', 'espresso', 'cold brew', 'mocha', 'cafe']):
         cuisine_types.append("Coffee and Tea")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal", "build"]):
+    if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal", "build", 'basket']):
         cuisine_types.append("Combo Specials")
 
     if any(keyword.lower() in name.lower() for keyword in ["Burger", "Slider", 'smashmouth']):
         cuisine_types.append("Burgers")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", "Fresh"]):
+    if any(keyword.lower() in name.lower() for keyword in ["seafood", "salmon", 'fish', 'ceviche', 'shrimp', 'camar', 'mariscos', 'Calamar', 'crab', 'lobster', 'tuna']):
+        cuisine_types.append("Seafood")
+
+    if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", "Fresh", 'bowl']):
         cuisine_types.append("Healthy")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate", 'oreo', 'cannoli', 'brownie', 'fudge', 'reese']):
+    if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate", 'oreo', 'cannoli', 'brownie', 'fudge', 'reese', 'tulumba', 'churro']):
         cuisine_types.append("Dessert")
 
         # Return the list of cuisine types
@@ -134,7 +137,7 @@ cuisine_colors = {
     'Asian': '#FFC170', # earth yellow
     'Indian': '#6A66A3', # ultra violet
     'Mediterranean': '#0D6E6A', # caribbean current 
-    'Vegan': '#A7D111', # yellow green
+    'Vegan/Vegetarian': '#A7D111', # yellow green
     'Healthy': '#FC6DAB', # hot pink
     'Breakfast': '#EC8209', # tangerine
     'Drinks': '#73C2BE', # tiffany blue
