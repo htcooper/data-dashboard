@@ -77,8 +77,11 @@ def get_cuisine_type(name):
     if any(keyword.lower() in name.lower() for keyword in ["Juice", "Snapple", "Coke", "Soda", "Agua", "Water", "Ale", "Lemonade", "Sprite", "Pepsi", "Bottle", "Horchata", "Lassi", "Coffee", "Tea", "Latte", "Boba", 'san pellegrino', 'smoothie', 'cappu', 'limona', 'cola', 'red bull', 'jaritos', 'jarritos', 'dr pepper', 'cold brew', 'kool']):
         cuisine_types.append("Drinks")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Coffee", "Tea", "Latte", "Boba", 'cappu', 'espresso', 'cold brew', 'mocha', 'cafe']):
+    if any(keyword.lower() in name.lower() for keyword in ["Coffee", 'tea', "Latte", "Boba", 'cappu', 'espresso', 'cold brew', 'mocha', 'cafe']):
         cuisine_types.append("Coffee and Tea")
+
+    if any(keyword.lower() in name.lower() for keyword in ['steak', 'platter', 'donut']) and "Coffee and Tea" in cuisine_types:
+        cuisine_types.remove("Coffee and Tea")
 
     if any(keyword.lower() in name.lower() for keyword in ["Combo", "Plate", "Dinner", "Meal", "build", 'basket']):
         cuisine_types.append("Combo Specials")
@@ -89,11 +92,12 @@ def get_cuisine_type(name):
     if any(keyword.lower() in name.lower() for keyword in ["seafood", "salmon", 'fish', 'ceviche', 'shrimp', 'camar', 'mariscos', 'Calamar', 'crab', 'lobster', 'tuna']):
         cuisine_types.append("Seafood")
 
-    if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", "Fresh", 'bowl']):
+    if any(keyword.lower() in name.lower() for keyword in ["Acai", "Salad", "Healthy", "Fruit", 'bowl']):
         cuisine_types.append("Healthy")
 
     if any(keyword.lower() in name.lower() for keyword in ["Cake", "Ice Cream", "Sundae", "Cookie", "Tiramisu", "Chocolate", 'oreo', 'cannoli', 'brownie', 'fudge', 'reese', 'tulumba', 'churro']):
         cuisine_types.append("Dessert")
+
 
         # Return the list of cuisine types
     return cuisine_types if len(cuisine_types) > 0 else ["Unknown"]
@@ -153,7 +157,8 @@ cuisine_colors = {
     'Burgers': '#9C0D38', # claret
     'Coffee and Tea': '#625141', # umber
     'Sides': '#F87666', # bittersweet orange
-    'Unknown': '#FDFFFC' # baby powder white
+    'Unknown': '#FDFFFC', # baby powder white
+    'Seafood': '#00bfff' # bright turquoise
     
 }
 
