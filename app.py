@@ -1,3 +1,5 @@
+# Note: the categorization for cuisine types is much hackier than I would like. Ideally, cuisine type would be a field added to the dataset CSV as part of the data cleanup.
+
 import pandas as pd
 import streamlit as st
 import plotly.express as px
