@@ -2,4 +2,4 @@
 
 This was a small project using Python and Streamlit to convert a CSV file of restaurant data into interactive charts.  
 
-See the app: https://htcooper-rs-dashboard-app-t89tjw.streamlit.app/
+See the app: https://htcooper-rs-dashboard-app-t89tjw.streamlit.app/ (you might need to give it a second to wake up!)
